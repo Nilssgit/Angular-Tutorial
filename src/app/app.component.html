@@ -1,11 +1,8 @@
-<app-header (activateShoppingListTemplate)="enableShoppingList= $event"></app-header>
+<app-header></app-header>
 <div class="container">
   <div class="row">
-    <div class="col-md-9" *ngIf="enableShoppingList == false">
-      <app-recipe-book></app-recipe-book>
-    </div>
-    <div class="col-md-3" *ngIf="enableShoppingList == true">
-      <app-shopping-list></app-shopping-list>
+    <div class="col-md-9">
+      <router-outlet></router-outlet>
     </div>
   </div>
 </div>
