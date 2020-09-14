@@ -24,7 +24,8 @@ export class RecipeDetailComponent implements OnInit {
     }
   }
 
-  test(){
-
+  test() {
+  }
+  testOnMaster() {
   }
 }
