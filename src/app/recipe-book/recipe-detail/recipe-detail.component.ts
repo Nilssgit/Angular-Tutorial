@@ -23,10 +23,4 @@ export class RecipeDetailComponent implements OnInit {
       this.shoppingListService.addNewIngredient(ingredient);
     }
   }
-
-  test() {
-  }
-
-  testOnMaster() {
-  }
 }
