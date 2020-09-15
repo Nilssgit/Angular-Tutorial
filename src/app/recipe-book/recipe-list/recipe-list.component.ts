@@ -19,9 +19,9 @@ export class RecipeListComponent implements OnInit {
     this.recipes = this.recipeService.getRecipes();
   }
 
-  clickedOnRecipe(recipe: Recipe) {
-    console.log(recipe);
-    this.router.navigate([recipe.name], {relativeTo: this.route});
+  clickedOnRecipe(recipeIndex: number): void {
+    console.log(this.recipes[recipeIndex]);
+    this.router.navigate([recipeIndex], {relativeTo: this.route});
   }
 
 }
