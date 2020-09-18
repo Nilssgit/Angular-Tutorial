@@ -3,7 +3,7 @@ import {RecipeService} from '../recipe.service';
 import {ShoppingListService} from '../../shopping-list/shopping-list.service';
 import {Recipe} from '../recipe.model';
 import {Ingredient} from '../../shared/ingredient.model';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -12,8 +12,10 @@ import {ActivatedRoute} from '@angular/router';
 })
 export class RecipeDetailComponent implements OnInit {
   recipe: Recipe = new Recipe('Empty', 'None', '', [new Ingredient('', 0)]);
+  indexOfRecipe: number;
 
-  constructor(private route: ActivatedRoute,
+  constructor(private router: Router,
+              private route: ActivatedRoute,
               private recipeService: RecipeService,
               private shoppingListService: ShoppingListService) {
   }
@@ -21,9 +23,9 @@ export class RecipeDetailComponent implements OnInit {
   ngOnInit(): void {
     this.route.params
       .subscribe((params) => {
-        const recipeIndex = params.id;
-        console.log(+recipeIndex);
-        this.recipe = this.recipeService.getRecipe(+recipeIndex);
+        this.indexOfRecipe = +params.id;
+        console.log(this.indexOfRecipe);
+        this.recipe = this.recipeService.getRecipe(this.indexOfRecipe);
       });
   }
 
@@ -31,5 +33,10 @@ export class RecipeDetailComponent implements OnInit {
     for (const ingredient of this.recipe.ingredients) {
       this.shoppingListService.addNewIngredient(ingredient);
     }
+  }
+
+  clickedDeleteRecipe(): void{
+    this.recipeService.deleteRecipe(this.indexOfRecipe);
+    this.router.navigate(['/recipes']);
   }
 }

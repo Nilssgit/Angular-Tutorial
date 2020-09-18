@@ -1,7 +1,15 @@
 import {Recipe} from './recipe.model';
 import {Ingredient} from '../shared/ingredient.model';
+import {Subject} from 'rxjs';
+import {Injectable} from '@angular/core';
+import {HttpRequestsService} from '../shared/http-requests.service';
 
+@Injectable()
 export class RecipeService {
+  recipesChanged = new Subject<Recipe[]>();
+
+  constructor(private httpService: HttpRequestsService) {
+  }
 
   private recipes: Recipe[] = [
     new Recipe(
@@ -18,11 +26,41 @@ export class RecipeService {
     )
   ];
 
-  getRecipes(): Recipe[]{
+  getRecipes(): Recipe[] {
     return this.recipes.slice();
   }
 
   getRecipe(index: number): Recipe {
     return this.recipes[index];
+  }
+
+  getIndexOfNew(): number {
+    return this.recipes.length;
+  }
+
+  addRecipe(recipe: Recipe): void {
+    this.recipes.push(recipe);
+    this.recipesChanged.next(this.recipes.slice());
+  }
+
+  updateRecipe(index: number, recipe: Recipe) {
+    this.recipes[index] = recipe;
+    this.recipesChanged.next(this.recipes.slice());
+  }
+
+  deleteRecipe(index: number) {
+    this.recipes.splice(index, 1);
+    this.recipesChanged.next(this.recipes.slice());
+  }
+
+  saveRecipesToServer(){
+    this.httpService.updateRecipesOnServer(this.recipes);
+  }
+
+  getRecipesFromServer(){
+    this.httpService.getRecipesFromServer().subscribe(recipes => {
+      this.recipes = recipes;
+      this.recipesChanged.next(recipes);
+    });
   }
 }

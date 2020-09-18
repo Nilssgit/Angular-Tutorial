@@ -6,7 +6,7 @@ import {RecipeService} from './recipe.service';
   selector: 'app-recipe-book',
   templateUrl: './recipe-book.component.html',
   styleUrls: ['./recipe-book.component.css'],
-  providers: [RecipeService]
+  providers: []
 })
 export class RecipeBookComponent implements OnInit {
   // pickedRecipe = new Recipe('No Recipe selected', 'Please select Recipe', '', []);
