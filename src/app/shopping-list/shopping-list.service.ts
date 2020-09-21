@@ -1,6 +1,9 @@
 import {Ingredient} from '../shared/ingredient.model';
 import {Subject} from 'rxjs';
+import {Injectable} from '@angular/core';
+import {HttpRequestsService} from '../shared/http-requests.service';
 
+@Injectable()
 export class ShoppingListService {
   ingredientsChanged = new Subject<Ingredient[]>();
   ingredientClicked = new Subject<number>();
@@ -9,6 +12,9 @@ export class ShoppingListService {
     new Ingredient('Oats', 3),
     new Ingredient('Nuts', 4)
   ];
+
+  constructor(private httpService: HttpRequestsService) {
+  }
 
   addNewIngredient(newIngredient: Ingredient): void {
     if (!this.isIngredientOnList(newIngredient)) {
@@ -47,6 +53,17 @@ export class ShoppingListService {
   deleteItem(index: number): void {
     this.ingredients.splice(index, 1);
     this.ingredientsChanged.next(this.ingredients.slice());
+  }
+
+  saveShoppingListToServer() {
+    this.httpService.updateIngredientsOnServer(this.ingredients);
+  }
+
+  getShoppingListFromServer() {
+    this.httpService.getIngredientFromServer().subscribe(ingredients =>{
+      this.ingredients = ingredients;
+      this.ingredientsChanged.next(this.ingredients.slice());
+    });
   }
 }
 
